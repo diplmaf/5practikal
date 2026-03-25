@@ -1,3 +1,104 @@
+const count = dayLessons.length
+  const totalMinutes = dayLessons.reduce((sum, lesson) => sum + (lesson.duration || 0), 0)
+  return { name: day, count, totalMinutes }
+})
+- расчет количества занятий и минут нагрузки по каждому дню
+---
+return (
+  <div className="statistics">
+    <h3>📊 Статистика</h3>
+    <div className="stats-summary">
+      <div className="stat-card">
+        <span className="stat-value">{totalLessons}</span>
+        <span className="stat-label">Всего занятий</span>
+      </div>
+      <div className="stat-card">
+        <span className="stat-value">{avgPerDay}</span>
+        <span className="stat-label">В день в среднем</span>
+      </div>
+    </div>
+    <div className="day-load">
+      <h4>Нагрузка по дням</h4>
+      {dayLoad.map(day => (
+        <div key={day.name} className="day-load-item">
+          <span className="day-name">{day.name}</span>
+          <div className="load-bar-container">
+            <div className="load-bar" style={{ width: Math.min((day.totalMinutes / 120) * 100, 100) + '%', backgroundColor: day.count > 0 ? '#96CEB4' : '#ddd' }} />
+          </div>
+          <span className="load-count">{day.count} зан. ({day.totalMinutes} мин)</span>
+        </div>
+      ))}
+    </div>
+  </div>
+)**
+- рендеринг статистики: карточки с общим количеством и полосы нагрузки по дням
+
+---
+
+## src/components/Statistics.css
+.statistics
+- фон: белый, скругление: 12px, отступы: 20px
+---
+.stat-card
+- градиент: #667eea → #764ba2, цвет текста: белый
+---
+.load-bar
+- высота: 100%, скругление: 12px, плавное изменение ширины
+
+---
+
+## src/components/WeekGrid.jsx
+import React, { useState } from 'react'
+- импорт React и хука useState
+---
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragOverlay } from '@dnd-kit/core'
+- импорт компонентов для реализации drag-and-drop функциональности
+---
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
+- импорт утилит для сортируемых элементов
+---
+import { useSortable } from '@dnd-kit/sortable'
+- импорт хука для создания перетаскиваемых элементов
+---
+import { CSS } from '@dnd-kit/utilities'
+- импорт CSS-утилит для transform
+---
+import './WeekGrid.css'
+- импорт стилей сетки расписания
+---
+const SortableLesson = ({ lesson, day, onEdit, onDelete }) => {
+- компонент перетаскиваемого занятия с возможностью редактирования и удаления
+---
+const WeekGrid = ({ schedule, onEditLesson, onDeleteLesson, onMoveLesson }) => {
+- компонент сетки расписания с drag-and-drop поддержкой
+---
+const days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
+- массив дней недели для отображения колонок
+---
+const sensors = useSensors(
+  useSensor(PointerSensor),
+  useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+)
+- настройка сенсоров для drag-and-drop (мышь и клавиатура)
+---
+const [activeId, setActiveId] = useState(null)
+- состояние ID активного перетаскиваемого элемента
+---
+const [activeLesson, setActiveLesson] = useState(null)
+- состояние активного перетаскиваемого занятия
+---
+const [activeDay, setActiveDay] = useState(null)
+- состояние дня, из которого перетаскивается занятие
+---
+const handleDragStart = (event) => {
+- обработчик начала перетаскивания: определяет занятие и день
+---
+const handleDragEnd = (event) => {
+- обработчик окончания перетаскивания: определяет целевой день, проверяет конфликты, выполняет перемещение
+---
+return (
+  <div className="week-grid">
+    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
 <div className="days-container">
         {days.map(day => {
           const dayLessons = schedule[day] || []
