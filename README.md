@@ -1,3 +1,207 @@
+# Конструктор расписания
+
+## src/main.jsx
+import React from 'react'
+- импорт библиотеки React для создания компонентов
+---
+import ReactDOM from 'react-dom/client'
+- импорт ReactDOM для рендеринга приложения в DOM
+---
+import App from './App.jsx'
+- импорт главного компонента приложения
+---
+import './App.css'
+- импорт глобальных стилей приложения
+---
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+)
+- создание корневого элемента React и рендеринг главного компонента App в режиме строгой проверки
+
+---
+
+## src/App.jsx
+import React, { useState, useEffect } from 'react'
+- импорт React и хуков useState для управления состоянием, useEffect для побочных эффектов
+---
+import LessonList from './components/LessonList'
+- импорт компонента списка занятий
+---
+import WeekGrid from './components/WeekGrid'
+- импорт компонента сетки расписания на неделю
+---
+import Filters from './components/Filters'
+- импорт компонента фильтров и поиска
+---
+import Statistics from './components/Statistics'
+- импорт компонента статистики
+---
+import { loadData, saveData } from './utils/storage'
+- импорт функций загрузки и сохранения данных из localStorage
+---
+import './App.css'
+- импорт стилей главного приложения
+---
+function App() {
+- объявление главного функционального компонента App
+---
+const [lessons, setLessons] = useState([])
+- состояние для хранения списка всех доступных занятий, начальное значение - пустой массив
+---
+const [schedule, setSchedule] = useState({})
+- состояние для хранения расписания по дням недели, начальное значение - пустой объект
+---
+const [searchQuery, setSearchQuery] = useState('')
+- состояние для хранения строки поиска по названию занятия
+---
+const [categoryFilter, setCategoryFilter] = useState('all')
+- состояние для хранения выбранной категории фильтрации
+---
+useEffect(() => {
+  const data = loadData()
+  setLessons(data.lessons)
+  setSchedule(data.schedule)
+}, [])
+- хук эффекта, выполняющий загрузку данных из localStorage при первом рендеринге компонента
+---
+useEffect(() => {
+  if (lessons.length > 0 && Object.keys(schedule).length > 0) {
+    saveData({ lessons, schedule })
+  }
+}, [lessons, schedule])
+- хук эффекта, сохраняющий данные в localStorage при каждом изменении списка занятий или расписания
+---
+const categories = ['Основные', 'Языки', 'IT', 'Гуманитарные']
+- массив доступных категорий для фильтрации
+---
+const handleAddToSchedule = (lesson) => {
+- функция добавления занятия в расписание по выбору дня через prompt
+---
+const handleEditLesson = (id, newName, newDuration, newCategory) => {
+- функция редактирования занятия в списке (название, длительность, категория)
+---
+const handleEditScheduleLesson = (day, lessonId, newName, newDuration) => {
+- функция редактирования занятия в расписании (название, длительность)
+---
+const handleDeleteLesson = (id) => {
+- функция удаления занятия из списка с подтверждением, также удаляет из расписания
+---
+const handleDeleteScheduleLesson = (day, lessonId) => {
+- функция удаления занятия из расписания с подтверждением
+---
+const handleMoveLesson = (day, newLessons) => {
+- функция перемещения занятия (изменение порядка или перенос между днями)
+---
+return (
+  <div className="app">
+    <h1>📅 Конструктор расписания на неделю</h1>
+    <Statistics schedule={schedule} />
+    <Filters
+      searchQuery={searchQuery}
+      onSearchChange={setSearchQuery}
+      categoryFilter={categoryFilter}
+      onCategoryChange={setCategoryFilter}
+      categories={categories}
+    />
+    <div className="main-content">
+      <LessonList
+        lessons={lessons}
+onAddToSchedule={handleAddToSchedule}
+        onEditLesson={handleEditLesson}
+        onDeleteLesson={handleDeleteLesson}
+        searchQuery={searchQuery}
+        categoryFilter={categoryFilter}
+      />
+      <WeekGrid
+        schedule={schedule}
+        onEditLesson={handleEditScheduleLesson}
+        onDeleteLesson={handleDeleteScheduleLesson}
+        onMoveLesson={handleMoveLesson}
+      />
+    </div>
+  </div>
+)
+- рендеринг структуры приложения: заголовок, статистика, фильтры, список занятий и сетка расписания
+
+---
+
+## src/utils/storage.js
+const STORAGE_KEY = 'schedule_data'
+- константа ключа для хранения данных в localStorage
+---
+const defaultLessons = [
+  { id: '1', name: 'Математика', category: 'Основные', duration: 90, color: '#FF6B6B' },
+  { id: '2', name: 'Физика', category: 'Основные', duration: 90, color: '#4ECDC4' },
+  { id: '3', name: 'Английский', category: 'Языки', duration: 60, color: '#45B7D1' },
+  { id: '4', name: 'Программирование', category: 'IT', duration: 120, color: '#96CEB4' },
+  { id: '5', name: 'История', category: 'Гуманитарные', duration: 60, color: '#FFEAA7' },
+  { id: '6', name: 'Литература', category: 'Гуманитарные', duration: 60, color: '#DDA0DD' }
+]
+- массив начальных занятий с id, названием, категорией, длительностью и цветом
+---
+const defaultSchedule = {
+  'Понедельник': [],
+  'Вторник': [],
+  'Среда': [],
+  'Четверг': [],
+  'Пятница': [],
+  'Суббота': [],
+  'Воскресенье': []
+}
+- объект начального пустого расписания на все дни недели
+---
+export const loadData = () => {
+  const saved = localStorage.getItem(STORAGE_KEY)
+  if (saved) {
+    return JSON.parse(saved)
+  }
+  return { lessons: defaultLessons, schedule: defaultSchedule }
+}
+- функция загрузки данных из localStorage, при отсутствии возвращает начальные данные
+---
+export const saveData = (data) => {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+}
+- функция сохранения данных в localStorage
+
+---
+
+## src/components/LessonList.jsx
+import React, { useState } from 'react'
+- импорт React и хука useState для управления состоянием редактирования
+---
+import './LessonList.css'
+- импорт стилей списка занятий
+---
+function LessonList({ lessons, onAddToSchedule, onEditLesson, onDeleteLesson, searchQuery, categoryFilter }) {
+- компонент отображения списка занятий с возможностью редактирования, удаления и добавления в расписание
+---
+const [editingId, setEditingId] = useState(null)
+- состояние ID редактируемого занятия
+---
+const filteredLessons = lessons.filter(lesson => {
+  const matchesSearch = lesson.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const matchesCategory = categoryFilter === 'all' || lesson.category === categoryFilter
+  return matchesSearch && matchesCategory
+})
+- фильтрация занятий по поисковому запросу и выбранной категории
+---
+return (
+  <div className="lesson-list">
+    <h2>Список занятий</h2>
+    <div className="lessons-container">
+      {filteredLessons.map(lesson => (
+        <div key={lesson.id} className="lesson-card" style={{ borderLeftColor: lesson.color }}>
+          {editingId === lesson.id ? (
+            <div className="lesson-edit-form">
+              <input type="text" value={editName} onChange={(e) => setEditName(e.target.value)} placeholder="Название" autoFocus />
+              <select value={editCategory} onChange={(e) => setEditCategory(e.target.value)}>
+                <option value="Основные">Основные</option>
+                <option value="Языки">Языки</option>
+                <option value="IT">IT</option>
+                <option value="Гуманитарные">Гуманитарные</option>
 </select>
               <select value={editDuration} onChange={(e) => setEditDuration(Number(e.target.value))}>
                 <option value={30}>30 мин</option>
