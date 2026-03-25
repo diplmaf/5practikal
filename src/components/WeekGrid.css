@@ -1,0 +1,203 @@
+.week-grid {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  overflow-x: auto;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.grid-container {
+  min-width: 800px;
+}
+
+.grid-header {
+  display: grid;
+  grid-template-columns: 80px repeat(7, 1fr);
+  background: #f5f5f5;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.time-column, .day-header {
+  padding: 12px;
+  font-weight: bold;
+  text-align: center;
+  border-bottom: 2px solid #ddd;
+}
+
+.day-header {
+  font-size: 14px;
+}
+
+.grid-row {
+  display: grid;
+  grid-template-columns: 80px repeat(7, 1fr);
+  border-bottom: 1px solid #eee;
+}
+
+.time-cell {
+  padding: 12px;
+  font-size: 12px;
+  color: #666;
+  text-align: center;
+  border-right: 1px solid #eee;
+}
+
+.day-cell {
+  min-height: 60px;
+  padding: 8px;
+  border-right: 1px solid #eee;
+  background: #fafafa;
+
+}
+
+.day-column.drag-over {
+  background: #e8f0fe;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.lesson-block {
+  background: #e3f2fd;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  margin-bottom: 4px;
+  border-left: 3px solid;
+  cursor: pointer;
+}
+
+.day-lessons-section {
+  margin-top: 30px;
+  border-top: 2px solid #eee;
+  padding-top: 15px;
+}
+
+.day-lessons-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #666;
+  font-size: 14px;
+}
+
+.day-lessons-list {
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.schedule-lesson {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-left: 4px solid;
+  cursor: grab;
+  transition: all 0.2s;
+}
+
+.schedule-lesson:active {
+  cursor: grabbing;
+}
+
+.lesson-drag-handle {
+  cursor: grab;
+  color: #999;
+  font-size: 18px;
+  user-select: none;
+}
+
+.lesson-drag-handle:active {
+  cursor: grabbing;
+}
+
+.lesson-content {
+  flex: 1;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.lesson-name {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.lesson-duration {
+  font-size: 12px;
+  color: #999;
+}
+
+.lesson-controls {
+  display: flex;
+  gap: 5px;
+}
+
+.small-edit, .small-delete {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.small-edit {
+  background: #4ECDC4;
+  color: white;
+}
+
+.small-delete {
+  background: #FF6B6B;
+  color: white;
+}
+
+.lesson-edit-inline {
+  display: flex;
+  gap: 5px;
+  flex: 1;
+}
+
+.lesson-edit-inline input {
+  padding: 4px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 12px;
+  width: 100px;
+}
+
+.lesson-edit-inline select {
+  padding: 4px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.save-inline, .cancel-inline {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.save-inline {
+  background: #96CEB4;
+  color: white;
+}
+
+.cancel-inline {
+  background: #ddd;
+}
+
+.dragging-overlay {
+  background: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border-left: 4px solid;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  cursor: grabbing;
+  font-size: 14px;
+}

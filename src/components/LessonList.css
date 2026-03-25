@@ -1,0 +1,141 @@
+.lesson-list {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.lesson-list h2 {
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 18px;
+}
+
+.lessons-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.lesson-card {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-left: 4px solid;
+  transition: transform 0.2s;
+}
+
+.lesson-card:hover {
+  transform: translateX(2px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.lesson-info h3 {
+  font-size: 16px;
+  margin-bottom: 4px;
+  color: #333;
+}
+
+.category {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.duration {
+  font-size: 12px;
+  color: #999;
+}
+
+.lesson-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.lesson-actions button {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+
+.edit-btn {
+  background: #4ECDC4;
+  color: white;
+}
+
+.edit-btn:hover {
+  background: #45b7aa;
+}
+
+.delete-btn {
+  background: #FF6B6B;
+  color: white;
+}
+
+.delete-btn:hover {
+  background: #e55a5a;
+}
+
+.add-btn {
+  background: #96CEB4;
+  color: white;
+}
+
+.add-btn:hover {
+  background: #7fb89a;
+}
+
+.lesson-edit-form {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.lesson-edit-form input,
+.lesson-edit-form select {
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.edit-buttons {
+  display: flex;
+  gap: 4px;
+}
+
+.save-btn {
+  background: #96CEB4;
+  color: white;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background: #ddd;
+  color: #666;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.no-lessons {
+  text-align: center;
+  color: #999;
+  padding: 20px;
+}
