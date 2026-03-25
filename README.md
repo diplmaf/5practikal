@@ -1,3 +1,118 @@
+</select>
+              <select value={editDuration} onChange={(e) => setEditDuration(Number(e.target.value))}>
+                <option value={30}>30 мин</option>
+                <option value={45}>45 мин</option>
+                <option value={60}>60 мин</option>
+                <option value={90}>90 мин</option>
+                <option value={120}>120 мин</option>
+              </select>
+              <div className="edit-buttons">
+                <button onClick={() => handleSaveEdit(lesson.id)} className="save-btn">✓</button>
+                <button onClick={handleCancelEdit} className="cancel-btn">✗</button>
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="lesson-info">
+                <h3>{lesson.name}</h3>
+                <p className="category">{lesson.category}</p>
+                <p className="duration">{lesson.duration} мин</p>
+              </div>
+              <div className="lesson-actions">
+                <button onClick={() => handleEdit(lesson)} className="edit-btn">✎</button>
+                <button onClick={() => onDeleteLesson(lesson.id)} className="delete-btn">🗑</button>
+                <button onClick={() => onAddToSchedule(lesson)} className="add-btn">+</button>
+              </div>
+            </>
+          )}
+        **</div>
+      ))}
+    </div>
+  </div>
+)**
+- рендеринг отфильтрованного списка занятий с формой редактирования
+
+---
+
+## src/components/LessonList.css
+.lesson-list
+- фон: белый, скругление: 12px, отступы: 20px, тень: 0 2px 8px rgba(0,0,0,0.1)
+---
+.lesson-card
+- фон: #f9f9f9, скругление: 8px, отступы: 12px, левая граница: 4px цветная
+---
+.edit-btn
+- фон: #4ECDC4, кнопка редактирования
+---
+.delete-btn
+- фон: #FF6B6B, кнопка удаления
+---
+.add-btn
+- фон: #96CEB4, кнопка добавления в расписание
+
+---
+
+## src/components/Filters.jsx
+import React from 'react'
+- импорт React
+---
+import './Filters.css'
+- импорт стилей фильтров
+---
+function Filters({ searchQuery, onSearchChange, categoryFilter, onCategoryChange, categories }) {
+- компонент поиска и фильтрации по категориям
+---
+return (
+  <div className="filters">
+    <div className="search-box">
+      <input type="text" placeholder="🔍 Поиск по названию..." value={searchQuery} onChange={(e) => onSearchChange(e.target.value)} />
+    </div>
+    <div className="category-filter">
+      <select value={categoryFilter} onChange={(e) => onCategoryChange(e.target.value)}>
+        <option value="all">Все категории</option>
+        {categories.map(cat => (
+          <option key={cat} value={cat}>{cat}</option>
+        ))}
+      </select>
+    </div>
+  </div>
+)**
+- рендеринг поля поиска и выпадающего списка категорий
+
+---
+
+## src/components/Filters.css
+.filters
+- фон: белый, скругление: 12px, отступы: 15px, гибкое расположение
+---
+.search-box input
+- отступы: 10px 15px, ширина: 250px, скругление: 8px
+---
+.category-filter select
+- отступы: 10px 15px, скругление: 8px
+
+---
+
+## src/components/Statistics.jsx
+import React from 'react'
+- импорт React
+---
+import './Statistics.css'
+- импорт стилей статистики
+---
+function Statistics({ schedule }) {
+- компонент отображения статистики: общее количество занятий и нагрузка по дням
+---
+const days = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
+- массив дней недели
+---
+const totalLessons = Object.values(schedule).reduce((sum, dayLessons) => {
+  return sum + (dayLessons?.length || 0)
+}, 0)
+- расчет общего количества занятий в расписании
+---
+const dayLoad = days.map(day => {
+  const dayLessons = schedule[day] || []
 const count = dayLessons.length
   const totalMinutes = dayLessons.reduce((sum, lesson) => sum + (lesson.duration || 0), 0)
   return { name: day, count, totalMinutes }
